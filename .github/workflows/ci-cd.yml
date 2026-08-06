@@ -13,7 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/python-cicd-demo
+  IMAGE_NAME: python-cicd-demo
+  REGISTRY_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/python-cicd-demo
 
 jobs:
   # ------------------------------------------------------------------ #
@@ -119,9 +120,10 @@ jobs:
 
       - name: Tag and push
         run: |
-          docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:latest
-          docker push $IMAGE_NAME:${{ github.sha }}
-          docker push $IMAGE_NAME:latest
+          docker tag $IMAGE_NAME:${{ github.sha }} $REGISTRY_IMAGE_NAME:${{ github.sha }}
+          docker tag $IMAGE_NAME:${{ github.sha }} $REGISTRY_IMAGE_NAME:latest
+          docker push $REGISTRY_IMAGE_NAME:${{ github.sha }}
+          docker push $REGISTRY_IMAGE_NAME:latest
 
   # ------------------------------------------------------------------ #
   # CD stage 2: deploy                                                  #
@@ -143,5 +145,5 @@ jobs:
           # Replace this with the real deploy step for your host, e.g.:
           #   curl -X POST "$RENDER_DEPLOY_HOOK"
           #   ssh user@server 'docker pull ... && docker compose up -d'
-          echo "Deploying $IMAGE_NAME:${{ github.sha }} ..."
+          echo "Deploying $REGISTRY_IMAGE_NAME:${{ github.sha }} ..."
           echo "url=https://example.com" >> "$GITHUB_OUTPUT"
