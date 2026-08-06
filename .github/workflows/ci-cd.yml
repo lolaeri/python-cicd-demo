@@ -13,7 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/python-cicd-demo
+  IMAGE_NAME: python-cicd-demo
+  REGISTRY_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/python-cicd-demo
 
 jobs:
   # ------------------------------------------------------------------ #
